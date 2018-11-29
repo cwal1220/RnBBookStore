@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
@@ -8,8 +9,7 @@
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName"
-			value="oracle.jdbc.OracleDriver" />
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property>
 		<property name="url"
 			value="jdbc:oracle:thin:@rnbsoftware.c6waeaaepqzl.ap-northeast-2.rds.amazonaws.com:1521:ORCL" />
 		<property name="username" value="rnbsoftware" />
@@ -18,13 +18,14 @@
 
 
 	<!-- [2] SqlSessionFactoryBean bean 선언 -->
-	<bean id="sqlSessionFactory" 
+	<bean id="sqlSessionFactory"
 		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<!-- mapper등록 -->
 		<property name="mapperLocations">
 			<list>
-				<value>classpath:config/joinMapper.xml</value>
+				<!--<value>classpath:config/joinMapper.xml</value>-->
+				<value>classpath*:config/joinMapper.xml</value>
 			</list>
 		</property>
 	</bean>
