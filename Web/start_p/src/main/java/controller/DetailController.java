@@ -1,5 +1,7 @@
 package controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -7,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import dao.MemDAO;
 import dto.MemDTO;
+import dto.PersonDTO;
 
 @Controller
 public class DetailController {
@@ -43,6 +46,34 @@ public class DetailController {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:/index.do");
 		return mav;
+	}
+	
+	@RequestMapping("/login.do")
+	public String loginProcess() {
+		return "loginForm";
+	}
+	
+	@RequestMapping("/logpro.do")
+	public String logCheckProcess(String returnUrl, PersonDTO dto, HttpSession session) {
+		
+		if(dto.getId().equals("kim")&&dto.getPass().equals("1234")) {
+			session.setAttribute("chk", dto.getId());
+			if(returnUrl!="") {
+				return "redirect:/"+returnUrl;
+			}
+		}
+		return "redirect:/index.do";
+	}//end logCheckProcess()
+	
+	@RequestMapping("/logout.do")
+	public String logoutProcess(HttpSession session) {
+		session.removeAttribute("chk");
+		return "redirect:/index.do";
+	}
+	
+	@RequestMapping("/websocket.do")
+	public String webSocket() {
+		return "websocket";
 	}
 	
 /*	

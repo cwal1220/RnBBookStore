@@ -5,7 +5,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title> 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>   
+
+
+
+   
 </head>  
 <style type="text/css">
  
@@ -24,7 +27,7 @@ $(document).ready(function(){
 		 $('#frm').attr('action',"join.do").submit();	
 	});  
    
- 
+	
 });
 
 </script>
