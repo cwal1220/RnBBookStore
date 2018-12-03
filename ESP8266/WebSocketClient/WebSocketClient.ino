@@ -2,14 +2,21 @@
 #include <time.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WiFiMulti.h>
-
 #include <WebSocketsClient.h>
-
 #include <Hash.h>
+#include <SPI.h>
+#include <string.h>
+#include "MFRC522.h"
 
-char buffer[80];
+
+#define RST_PIN  D1  // RST-PIN für RC522 - RFID - SPI - Modul GPIO5 
+#define SS_PIN  D8  // SDA-PIN für RC522 - RFID - SPI - Modul GPIO4 
+char buf[80];
 ESP8266WiFiMulti WiFiMulti;
 WebSocketsClient webSocket;
+
+MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance
+
 
 #define USE_SERIAL Serial
 
@@ -29,48 +36,19 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
 		case WStype_TEXT:
 			USE_SERIAL.printf("[WSc] get text: %s\n", payload);
 
-			// send message to server
-			// webSocket.sendTXT("message here");
 			break;
 		case WStype_BIN:
 			USE_SERIAL.printf("[WSc] get binary length: %u\n", length);
 			hexdump(payload, length);
-
-			// send data to server
-			// webSocket.sendBIN(payload, length);
 			break;
 	}
 
 }
-
-
-void buttonPush()
-{
-  char temp_buff[80] = {'\0',};
-  printLocalTime();
-  sprintf(temp_buff, "%s Button Pushed!!", buffer);
-  webSocket.sendTXT(temp_buff);
-  USE_SERIAL.printf("%s Button Pushed....\n", buffer);
-}
-
-
-void printLocalTime()
-{
-  time_t rawtime;
-  struct tm * timeinfo;
-
-  time (&rawtime);
-  timeinfo = localtime (&rawtime);
-   strftime(buffer, 80, "[%Y-%m-%d %H:%M:%S]", timeinfo);
-}
-
-
 void setup() {
 	USE_SERIAL.begin(115200);
+  pinMode(D3, OUTPUT);
 	USE_SERIAL.setDebugOutput(true);
   
-  pinMode(0, INPUT_PULLUP);
-  attachInterrupt(0, buttonPush, FALLING);
   
 	for(uint8_t t = 4; t > 0; t--) {
 		USE_SERIAL.printf("[SETUP] BOOT WAIT %d...\n", t);
@@ -79,7 +57,8 @@ void setup() {
 	}
 
 	WiFiMulti.addAP("ParkChan", "88888888");
-  WiFiMulti.addAP("Kosta_Certi", "kostacerti");
+  	WiFiMulti.addAP("Kosta_Certi", "kostacerti");
+  	WiFiMulti.addAP("U+Net9618", "1157001488");
 
 	//WiFi.disconnect();
 	while(WiFiMulti.run() != WL_CONNECTED) {
@@ -98,9 +77,40 @@ void setup() {
 	// try ever 5000 again if connection has failed
 	webSocket.setReconnectInterval(5000);
 
-  configTime(0, 32400, "pool.ntp.org");
+	SPI.begin();           // Init SPI bus
+	mfrc522.PCD_Init();    // Init MFRC522
 }
 
 void loop() {
 	webSocket.loop();
+
+	// Look for new cards
+  if ( ! mfrc522.PICC_IsNewCardPresent()) {
+    delay(50);
+    return;
+  }
+  // Select one of the cards
+  if ( ! mfrc522.PICC_ReadCardSerial()) {
+    delay(50);
+    return;
+  }
+  digitalWrite(D3, HIGH);
+  String str = getUID(mfrc522.uid.uidByte, mfrc522.uid.size);
+  webSocket.sendTXT(str.c_str());
+  delay(150);
+  digitalWrite(D3, LOW);
+  delay(850);
+  Serial.println();
+
+
+}
+
+String getUID(byte *buffer, byte bufferSize) {
+  String content= "";
+  for (byte i = 0; i < bufferSize; i++) {
+    content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? "0" : ""));
+    content.concat(String(mfrc522.uid.uidByte[i], HEX));
+  }
+  Serial.println(content);
+  return content;
 }
