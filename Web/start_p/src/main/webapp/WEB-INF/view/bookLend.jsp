@@ -10,7 +10,7 @@
 <div>
 <form action="/member/loginProc" method="POST" class="form-horizontal">
 	<div class="form-group">
-		<label for="id" class="col-sm-2 control-label">회원번호</label>
+		<label for="id" class="col-sm-2 control-label">대여도서 코드번호</label>
 		<div class="col-sm-6">
 		<input type="text" id="id" name="id" 
 			class="form-control"/>
@@ -18,7 +18,7 @@
 	</div>
 
 	<div class="col-sm-offset-2">
-		<button id="btnLogin" class="btn btn-primary">로그인</button>
+		<button id="btnLogin" class="btn btn-primary">대여</button>
 		<button id="btnCancel" class="btn btn-danger">취소</button>
 	</div>
 </form>
