@@ -63,19 +63,19 @@
 	</bean>
 	
 <!-- tiles -->
-<bean class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
- <property name="definitions">
- <list>
-  <value>/WEB-INF/tiles.xml</value>
- </list>
- </property>
+<!-- <bean class="org.springframework.web.servlet.view.tiles3.TilesConfigurer"> -->
+<!--  <property name="definitions"> -->
+<!--  <list> -->
+<!--   <value>/WEB-INF/tiles.xml</value> -->
+<!--  </list> -->
+<!--  </property> -->
 
-</bean>
+<!-- </bean> -->
 <!-- view -->
-<bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-   <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"/>
-  <property name="order" value="1"/>
-</bean>
+<!-- <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver"> -->
+<!--    <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"/> -->
+<!--   <property name="order" value="1"/> -->
+<!-- </bean> -->
 
 <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
  <property name="prefix" value="/WEB-INF/view/"/>
