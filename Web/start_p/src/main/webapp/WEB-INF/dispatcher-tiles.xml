@@ -16,17 +16,6 @@
 		<property name="password" value="rnbsoftware" />
 	</bean>
 
-<!-- [1] DataSource bean 선언 
-	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName"
-			value="oracle.jdbc.OracleDriver" />
-		<property name="url"
-			value="jdbc:oracle:thin://@127.0.0.1:1521:xe" />
-		<property name="username" value="hr" />
-		<property name="password" value="a1234" />
-	</bean>
--->
 	<!-- [2] SqlSessionFactoryBean bean 선언 -->
 	<bean id="sqlSessionFactory" 
 		class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -49,9 +38,10 @@
 
 
 <!-- controller -->
-<bean class="controller.IndexController"/>
-<bean class="controller.Menu1Controller"/>
-<bean class="controller.Menu2Controller"/>
+<bean class="controller.Controller1"/>
+<bean class="controller.Controller2"/>
+<bean class="controller.Controller3"/>
+<bean class="controller.Controller4"/>
 <bean class="controller.DetailController">
   <property name="dao" ref="memdao" /> 
 </bean>
@@ -62,20 +52,7 @@
 		<property name="sqlSession" ref="sqlSession" />
 	</bean>
 	
-<!-- tiles -->
-<!-- <bean class="org.springframework.web.servlet.view.tiles3.TilesConfigurer"> -->
-<!--  <property name="definitions"> -->
-<!--  <list> -->
-<!--   <value>/WEB-INF/tiles.xml</value> -->
-<!--  </list> -->
-<!--  </property> -->
 
-<!-- </bean> -->
-<!-- view -->
-<!-- <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver"> -->
-<!--    <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"/> -->
-<!--   <property name="order" value="1"/> -->
-<!-- </bean> -->
 
 <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
  <property name="prefix" value="/WEB-INF/view/"/>
