@@ -9,8 +9,8 @@
 #include "MFRC522.h"
 
 
-#define RST_PIN  D1  // RST-PIN für RC522 - RFID - SPI - Modul GPIO5 
-#define SS_PIN  D8  // SDA-PIN für RC522 - RFID - SPI - Modul GPIO4 
+#define RST_PIN  D1  // RST-PIN for RC522 - RFID - SPI - Modul GPIO5 
+#define SS_PIN  D8  // SDA-PIN for RC522 - RFID - SPI - Modul GPIO4 
 char buf[80];
 ESP8266WiFiMulti WiFiMulti;
 WebSocketsClient webSocket;
@@ -21,64 +21,55 @@ MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance
 #define USE_SERIAL Serial
 
 void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
-
 	switch(type) {
-		case WStype_DISCONNECTED:
-			USE_SERIAL.printf("[WSc] Disconnected!\n");
+		case WStype_DISCONNECTED: // 연결 해제시
+			Serial.printf("[WSc] Disconnected!\n");
 			break;
-		case WStype_CONNECTED: {
-			USE_SERIAL.printf("[WSc] Connected to url: %s\n", payload);
-
-			// send message to server when Connected
+		case WStype_CONNECTED: // 연결 성공시
+			Serial.printf("[WSc] Connected to url: %s\n", payload);
 			webSocket.sendTXT("Connected");
-		}
 			break;
 		case WStype_TEXT:
-			USE_SERIAL.printf("[WSc] get text: %s\n", payload);
-
+			Serial.printf("[WSc] get text: %s\n", payload); // 메시지를 받으면
 			break;
-		case WStype_BIN:
+		case WStype_BIN: // 2진메세지
 			USE_SERIAL.printf("[WSc] get binary length: %u\n", length);
 			hexdump(payload, length);
 			break;
 	}
-
 }
 void setup() {
-	USE_SERIAL.begin(115200);
+	Serial.begin(115200);
   pinMode(D3, OUTPUT);
-	USE_SERIAL.setDebugOutput(true);
-  
-  
-	for(uint8_t t = 4; t > 0; t--) {
-		USE_SERIAL.printf("[SETUP] BOOT WAIT %d...\n", t);
-		USE_SERIAL.flush();
-		delay(1000);
-	}
+	Serial.setDebugOutput(true);
 
-	WiFiMulti.addAP("ParkChan", "88888888");
-  	WiFiMulti.addAP("Kosta_Certi", "kostacerti");
-  	WiFiMulti.addAP("U+Net9618", "1157001488");
 
-	//WiFi.disconnect();
+  // Wi-Fi 등록
+  WiFiMulti.addAP("ParkChan", "88888888");
+  WiFiMulti.addAP("Kosta_Certi", "kostacerti");
+  WiFiMulti.addAP("U+Net9618", "1157001488");
+
+  // Wi-Fi 연결 대기
 	while(WiFiMulti.run() != WL_CONNECTED) {
 		delay(100);
 	}
 
-	// server address, port and URL
+	// 웹소켓 IP, 주소,,,
 	webSocket.begin("49.236.136.179", 8080, "/hehe/broadcasting");
 
-	// event handler
+	// 웹소켓 이벤트 핸들러 등록
 	webSocket.onEvent(webSocketEvent);
 
-	// use HTTP Basic Authorization this is optional remove if not needed
-//	webSocket.setAuthorization("user", "Password");
+  // 웹소켓 인증시 사용됨
+//  webSocket.setAuthorization("user", "Password");
 
-	// try ever 5000 again if connection has failed
+  // 5000ms 경과시 재연결 시도
 	webSocket.setReconnectInterval(5000);
 
-	SPI.begin();           // Init SPI bus
-	mfrc522.PCD_Init();    // Init MFRC522
+  // Init SPI bus
+	SPI.begin();
+  // Init MFRC522
+	mfrc522.PCD_Init();    
 }
 
 void loop() {
