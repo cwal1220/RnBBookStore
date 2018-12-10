@@ -16,7 +16,7 @@
 #define EEPROM_LENGTH 1024
 #define RST_PIN  D1  // RST-PIN for RC522 - RFID - SPI - Modul GPIO5 
 #define SS_PIN  D8  // SDA-PIN for RC522 - RFID - SPI - Modul GPIO4 
-#define BUZZER D3
+#define BUZZER D2
 
 // Captive
 WiFiClient espClient;
