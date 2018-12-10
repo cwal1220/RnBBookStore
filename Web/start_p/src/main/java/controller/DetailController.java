@@ -55,6 +55,8 @@ public class DetailController {
 	
 	@RequestMapping("/logpro.do")
 	public String logCheckProcess(String returnUrl, PersonDTO dto, HttpSession session) {
+		   
+		//DB에 해당사용자가 존재하면
 		
 		if(dto.getId().equals("kim")&&dto.getPass().equals("1234")) {
 			session.setAttribute("chk", dto.getId());

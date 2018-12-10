@@ -7,7 +7,7 @@ import dto.MemDTO;
 public interface MemDAO {
 	public void insert(MemDTO dto);
 //	public List<MemDTO> listdao();
-	
+	 
 /*public FnqDTO content(int num);
 	
 	public int countdata();
