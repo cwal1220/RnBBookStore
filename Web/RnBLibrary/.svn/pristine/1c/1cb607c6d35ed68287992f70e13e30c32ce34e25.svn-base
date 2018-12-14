@@ -1,0 +1,40 @@
+package Library.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import Library.dto.BookDto;
+
+@Repository
+public class BookDao {
+
+	@Autowired SqlSession session;	
+	
+	public void insert(BookDto dto) {
+		session.insert("book.insert",dto);
+	} 
+ 
+	
+	public BookDto select(int b_num) {
+		return session.selectOne("book.content",b_num);
+	}
+  
+	 
+	public List<BookDto> bookList(Library.util.PageDto pv) {
+		return session.selectList("book.listb",pv);
+	}
+
+
+	public int countdata() {
+		return session.selectOne("book.count");
+	}
+
+	
+	public List<BookDto> search(String data) {
+			return session.selectList("book.listc", data);
+	} 
+	
+}

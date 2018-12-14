@@ -1,0 +1,67 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="css/noview.css" />   
+<link href="https://fonts.googleapis.com/css?family=Gothic+A1" rel="stylesheet">
+</head>
+   <style>
+      body {
+        font-family: 'Gothic A1', serif;
+        font-size: 15px;
+      	}
+    </style>
+<body> 
+<table id="noview" border="1" width="50%"> 
+		<tr>
+			<th width="20%">글쓴이</th>
+			<td>운영자</td>
+			<th width="20%">도서코드: ${dto.b_id}</th> 
+		</tr>  
+ 
+		<tr>
+			<th>제목</th>
+			<td colspan="3">${dto.b_title}</td>
+		</tr>
+
+		<tr>
+        	<th>작가</th>
+			<td colspan="3">${dto.b_auth}</td>
+		</tr>
+		<tr>
+			<th>카테고리</th>
+			<td colspan="3">${dto.b_genre}</td>
+		</tr>
+		<tr>
+			<th>출판사</th>
+			<td colspan="3">${dto.b_pub}</td>
+		</tr>
+		
+		<tr>
+			<th>출판일</th>
+			<td colspan="3">${dto.b_date}</td>
+		</tr>
+		
+		<tr>
+			<td colspan="3"><br><br><img src="${dto.b_mainpic}"/><br><br>
+		</tr>
+		
+		<tr>
+			<td colspan="3"><h2>내용</h2><br><br>${dto.b_cont}<br><br><br><br><br><br><br><br><br><br><br><br></td>
+		</tr>
+
+	</table>
+    <br>
+    <br>
+	<form name="frm" id="frm" method="get">   
+		
+	</form>
+	<br>
+	<br> 
+	<br>
+</body>
+</html>

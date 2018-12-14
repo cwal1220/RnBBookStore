@@ -1,0 +1,76 @@
+package Library.controller;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import Library.dto.RentalDto;
+import Library.dto.RentalInfoDto;
+import Library.dto.UserDto;
+import Library.service.RentalService;
+import Library.service.UserService;
+
+@Controller
+public class RentalController {
+
+	@Autowired
+	RentalService rentalService;
+	
+	@Autowired
+	UserService userService;
+	
+	@RequestMapping("/bookRental.do")
+	public String rentalPage(HttpSession session) {
+		int rental_size = (Integer) session.getAttribute("rental_size");
+		if(rental_size >= 2)
+			return "rental/bookOver";
+		else
+			return "rental/bookRental";
+	}
+	
+	@RequestMapping("/bookReturn.do")
+	public String returnPage() {
+		return "rental/bookReturn";
+	}
+	
+	@RequestMapping(value = "/rentalProg.do", method = RequestMethod.POST)
+	public String rentalProg(String b_id, HttpSession session, HttpServletRequest req)
+	{
+		UserDto users = (UserDto) session.getAttribute("user");
+		
+		RentalDto rental = new RentalDto();
+		rental.setU_id(users.getU_id());
+		rental.setB_id(b_id);
+		
+		rentalService.insertRental(rental);
+		
+		RentalInfoDto book = rentalService.getRentalInfoByBid(b_id);
+		req.setAttribute("book", book);
+		
+		return "rental/rentalResult";
+	}
+	
+	
+	@RequestMapping(value = "/returnProg.do", method = RequestMethod.POST)
+	public String returnProg(String b_id, HttpSession session, HttpServletRequest req)
+	{
+		UserDto users = (UserDto) session.getAttribute("user");
+		
+		RentalInfoDto book = rentalService.getRentalInfoByBid(b_id);
+		req.setAttribute("book", book);
+		
+		RentalDto rental = new RentalDto();
+		rental.setB_id(b_id);
+		rental.setU_id(users.getU_id());
+		rentalService.deleteRental(rental);
+		
+		return "rental/returnResult";
+	}
+	
+}

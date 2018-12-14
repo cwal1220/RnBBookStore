@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="users">
+
+	<select id="getUserById" parameterType="String" resultType="Library.dto.UserDto"> 
+		SELECT
+			*
+		FROM
+			USERS
+		WHERE
+			u_id = #{u_id}
+	</select>
+	
+	<select id="selectById" parameterType="Library.dto.UserDto" resultType="int">
+		SELECT count(*) FROM users WHERE u_id = #{u_id }
+	</select>
+	
+	<select id="selectCntAll" resultType="int">
+		SELECT count(*) FROM users
+	</select>
+	
+	<select id="selectPagingList" resultType="Library.dto.UserDto">
+ 		SELECT * FROM (SELECT rownum rnum, U.* FROM (SELECT * FROM users ORDER BY u_id DESC) U ORDER BY rnum) WHERE u_id!='admin' AND rnum BETWEEN #{startNo} AND #{endNo } 
+ 	</select>
+ 	
+ 	<delete id="deleteUser" parameterType="String">
+ 		DELETE FROM users WHERE u_id = #{u_id }
+ 	</delete>
+ 	
+ 	<insert id="insertUser" parameterType="Library.dto.UserDto">
+		INSERT INTO users(u_id, u_name, u_tel, u_addr, u_dept, u_rank) VALUES(#{u_id }, #{u_name}, #{u_tel }, #{u_addr }, #{u_dept }, #{u_rank })
+	</insert>
+	
+	<update id="updateUserScore" parameterType="Library.dto.UserDto">
+      	UPDATE
+      		USERS
+      	SET
+      		u_score = u_score + #{u_score}
+      	WHERE
+      		u_id = #{u_id}
+	</update>
+</mapper>
+	
+	

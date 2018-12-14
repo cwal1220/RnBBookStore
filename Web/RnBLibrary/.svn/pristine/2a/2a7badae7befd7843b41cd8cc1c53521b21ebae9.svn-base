@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="book">
+
+ 
+	 <insert id="insert" parameterType="Library.dto.BookDto"> 
+  insert into books (b_num,b_id,b_title,b_auth,b_pub,b_cont,b_genre,b_date,b_mainpic) values (book_seq.nextval
+  ,#{b_id},#{b_title},#{b_auth},#{b_pub},#{b_cont},#{b_genre},#{b_date},#{b_mainpic})   
+ </insert>    
+	     
+	     
+ <select id="content" parameterType="int" resultType="Library.dto.BookDto">
+ select * from books where b_num=#{b_num} 
+ </select> 
+ 
+  <select id="listb" parameterType="Library.dto.BookDto" resultType="Library.dto.BookDto"> 
+  <![CDATA[  
+  select b.* from  
+  (select rownum as rm, a.* from(   
+  select * from books order by b_num desc )a)b
+  where b.rm>=#{startRow} and b.rm<=#{endRow}
+  ]]>     
+  </select> 
+  
+   <select id = "count" resultType="int">
+       select count(*) from books
+  </select>
+  
+   
+  <select id="listc"   parameterType="string" resultType="Library.dto.BookDto">
+  select * from books where b_title like '%'||#{b_title}||'%'
+</select>
+
+      
+      <update id="updateBookStatus" parameterType="Library.dto.BookDto">
+	      	UPDATE
+	      		BOOKS
+	      	SET
+	      		b_stat = #{b_stat}
+	      	WHERE
+	      		b_id = #{b_id}
+      </update>  
+      
+<!--  
+	<select id="content" parameterType="int" resultType="dto.MemDTO"> 
+         select * from mems where memNum=#{memNum}     
+    </select>
+	
+	 	
+
+	<select id="lista" resultType="dto.MemDTO">
+		select * from mems order by
+		Event_Num desc
+ 
+	</select>
+ -->
+
+	
+</mapper>

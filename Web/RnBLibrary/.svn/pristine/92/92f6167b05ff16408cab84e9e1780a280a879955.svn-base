@@ -1,0 +1,22 @@
+package Library.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import Library.dao.UserDao;
+import Library.dto.UserDto;
+
+@Service
+public class UserServiceImpl implements UserService{
+
+	@Autowired UserDao userDao;
+
+	@Override
+	public UserDto getUserById(String u_id) {
+		return userDao.getUserById(u_id);
+	}
+	
+	public int selectById(UserDto userDto) {
+		return userDao.selectById(userDto);
+	}
+}

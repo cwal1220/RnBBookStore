@@ -1,0 +1,64 @@
+package Library.dto;
+
+import java.util.Date;
+
+public class RentalInfoDto {
+
+	String u_id;
+	String b_id;
+	String b_title;
+	String b_auth;
+	String b_pub;
+	String b_genre;
+	Date r_date;
+	
+	public String getU_id() {
+		return u_id;
+	}
+	public void setU_id(String u_id) {
+		this.u_id = u_id;
+	}
+	public String getB_id() {
+		return b_id;
+	}
+	public void setB_id(String b_id) {
+		this.b_id = b_id;
+	}
+	public String getB_title() {
+		return b_title;
+	}
+	public void setB_title(String b_title) {
+		this.b_title = b_title;
+	}
+	public String getB_auth() {
+		return b_auth;
+	}
+	public void setB_auth(String b_auth) {
+		this.b_auth = b_auth;
+	}
+	public String getB_pub() {
+		return b_pub;
+	}
+	public void setB_pub(String b_pub) {
+		this.b_pub = b_pub;
+	}
+	public String getB_genre() {
+		return b_genre;
+	}
+	public void setB_genre(String b_genre) {
+		this.b_genre = b_genre;
+	}
+	public Date getR_date() {
+		return r_date;
+	}
+	public void setR_date(Date r_date) {
+		this.r_date = r_date;
+	}
+	@Override
+	public String toString() {
+		return "RentalInfoDto [u_id=" + u_id + ", b_id=" + b_id + ", b_title=" + b_title + ", b_auth=" + b_auth
+				+ ", b_pub=" + b_pub + ", b_genre=" + b_genre + ", r_date=" + r_date + "]";
+	}
+
+	
+}

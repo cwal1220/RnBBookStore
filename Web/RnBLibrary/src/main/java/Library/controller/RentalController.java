@@ -1,0 +1,118 @@
+package Library.controller;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import Library.dto.BookDto;
+import Library.dto.RentalDto;
+import Library.dto.RentalInfoDto;
+import Library.dto.UserDto;
+import Library.service.BookService;
+import Library.service.RentalService;
+import Library.service.UserService;
+
+@Controller
+public class RentalController {
+
+	@Autowired
+	RentalService rentalService;
+	
+	@Autowired
+	UserService userService;
+	
+	@Autowired
+	BookService bookService;
+	
+	@RequestMapping("/bookRental.do")
+	public String rentalPage(HttpSession session) {
+		int rental_size = (Integer) session.getAttribute("rental_size");
+		if(rental_size >= 2)
+			return "rental/bookOver";
+		else
+			return "rental/bookRental";
+	}
+	
+	@RequestMapping("/bookReturn.do")
+	public String returnPage() {
+		return "rental/bookReturn";
+	}
+	
+	@RequestMapping(value = "/rentalProg.do", method = RequestMethod.POST)
+	public String rentalProg(String b_id, HttpSession session, HttpServletRequest req)
+	{
+		try {
+			UserDto users = (UserDto) session.getAttribute("user");
+			// Rentals 테이블에 추가
+			RentalDto rental = new RentalDto();
+			rental.setU_id(users.getU_id());
+			rental.setB_id(b_id);
+			rentalService.insertRental(rental);
+			
+			// 책 정보 업데이트
+			BookDto temp_book = new BookDto();
+			temp_book.setB_id(b_id);
+			temp_book.setB_stat(0); // 1대출가능 0대출중
+			bookService.updateBookStatus(temp_book);
+			
+			// JSP에 전달
+			RentalInfoDto book = rentalService.getRentalInfoByBid(b_id);
+			req.setAttribute("book", book);
+			
+			return "rental/rentalResult";
+		} catch (Exception e) {
+			// 오류페이지
+			return "rental/rentalFail";
+		}
+
+	}
+	
+	
+	@RequestMapping(value = "/returnProg.do", method = RequestMethod.POST)
+	public String returnProg(String b_id, HttpSession session, HttpServletRequest req)
+	{
+		try {
+			UserDto users = (UserDto) session.getAttribute("user");
+			
+			RentalInfoDto book = rentalService.getRentalInfoByBid(b_id);
+			req.setAttribute("book", book);
+			
+			// 대여 목록에서 삭제
+			RentalDto rental = new RentalDto();
+			rental.setB_id(b_id);
+			rental.setU_id(users.getU_id());
+			rentalService.deleteRental(rental);
+			
+			// 책 정보 업데이트
+			BookDto temp_book = new BookDto();
+			temp_book.setB_id(b_id);
+			temp_book.setB_stat(1); // 1대출가능 0대출중
+			bookService.updateBookStatus(temp_book);
+			
+			// 대여 점수 연산
+			if(book.getRemDate() >= 0) // 제때 반납한 경우
+			{
+				users.setU_score(1);	// 1점 올려줌ㅋ
+				userService.updateUserScore(users);
+			}
+			else // 연체한 경우
+			{
+				users.setU_score(book.getRemDate()); // 연체일수만큼 점수차감!!
+				userService.updateUserScore(users);
+			}
+			
+			return "rental/returnResult";
+			
+		} catch (Exception e) {
+			// 오류페이지
+			return "rental/returnFail";
+		}
+	}
+	
+}

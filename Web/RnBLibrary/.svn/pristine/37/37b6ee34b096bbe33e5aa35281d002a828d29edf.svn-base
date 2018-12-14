@@ -1,0 +1,10 @@
+package Library.service;
+
+import Library.dto.UserDto;
+
+public interface UserService {
+	
+	UserDto getUserById(String u_id);
+	
+	public int selectById(UserDto userDto);
+}

@@ -1,0 +1,63 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<c:if test="${empty admin }">
+<%@ include file="../include/header.jsp"%>
+</c:if>
+
+<c:if test="${admin }">
+<%@ include file="../include/headerAdmin.jsp"%>
+</c:if>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#btnWrite").click(function() {
+		location.href="/admin/noticeWrite.do";
+	});
+});
+</script>
+
+<body>
+
+<div class="container">
+
+
+<c:if test="${admin }">
+<button id="btnWrite" class="btn btn-primary pull-right"
+ style="margin-top: 20px;">글쓰기</button>
+ </c:if>
+
+<h3 class="font-weight-bold" style="margin-top:50px; margin-left:10px;">공지사항 게시판</h3>
+<div class="clearfix"></div>
+<hr>
+<table class="table table-striped table-hover">
+<tr>
+	<th>번호</th>
+	<th class="text-center" style="width:300px;">제목</th>
+	<th class="text-center">작성자</th>
+	<th class="text-center">조회수</th>
+	<th class="text-center">작성일</th>
+</tr>
+<c:forEach items="${noticeList}" var="noticeList">
+<tr>
+	<td>${noticeList.n_id}</td>
+	<td class="text-center">
+		<a href="/noticeView.do?n_id=${noticeList.n_id}">${noticeList.n_title}</a>
+	</td>
+	<td class="text-center">관리자</td>
+	<td class="text-center">${noticeList.n_count}</td>
+	<td class="text-center"><fmt:formatDate value="${noticeList.n_date}" pattern="yyyy-MM-dd"/></td>
+</tr>
+</c:forEach>
+</table>
+<hr>
+</div>
+
+<jsp:include page="../util/paging2.jsp" />
+
+<br>
+</body>
+</html>
+

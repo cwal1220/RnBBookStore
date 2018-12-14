@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram version="1" name="123" time="201812131517">
+	<entities>
+		<data-source id="oracle_thin-167a62f60d8-74491f50d0bd3db3">
+			<entity id="1" name="BOOKS" fq-name="RNBSOFTWARE.BOOKS">
+				<path name="RNBSOFTWARE"/>
+			</entity>
+			<entity id="2" name="NOTICES" fq-name="RNBSOFTWARE.NOTICES">
+				<path name="RNBSOFTWARE"/>
+			</entity>
+			<entity id="3" name="RENTALS" fq-name="RNBSOFTWARE.RENTALS">
+				<path name="RNBSOFTWARE"/>
+			</entity>
+			<entity id="4" name="USERS" fq-name="RNBSOFTWARE.USERS">
+				<path name="RNBSOFTWARE"/>
+			</entity>
+		</data-source>
+	</entities>
+	<relations>
+		<relation name="SYS_C005279" fq-name="RNBSOFTWARE.RENTALS.SYS_C005279" type="fk" pk-ref="1" fk-ref="3"/>
+		<relation name="SYS_C005278" fq-name="RNBSOFTWARE.RENTALS.SYS_C005278" type="fk" pk-ref="4" fk-ref="3"/>
+	</relations>
+	<notes/>
+</diagram>

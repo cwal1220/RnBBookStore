@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="notice">
+
+	<select id="selectCntAll" resultType="int">
+		SELECT count(*) FROM notices
+	</select>
+	
+	<select id="selectPagingList" resultType="Library.dto.NoticeDto">
+ 		SELECT * FROM (SELECT rownum rnum, N.* FROM (SELECT * FROM notices ORDER BY n_id DESC) N ORDER BY rnum) WHERE rnum BETWEEN #{startNo} AND #{endNo } 
+ 	</select>
+	
+	<select id="selectView" parameterType="Library.dto.NoticeDto" resultType="Library.dto.NoticeDto">
+		SELECT * FROM notices WHERE n_id=#{n_id }
+	</select>
+	
+	<update id="updateCnt" parameterType="Library.dto.NoticeDto">
+		UPDATE notices SET n_count=n_count+1 WHERE n_id=#{n_id }
+	</update>
+	
+	<insert id="insertNotice" parameterType="Library.dto.NoticeDto">
+		INSERT INTO notices(n_id, n_title, n_cont) VALUES(NOTICES_SEQ.nextval, #{n_title }, #{n_cont })
+	</insert>
+	
+</mapper>

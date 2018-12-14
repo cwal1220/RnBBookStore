@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rental">
+	 <insert id="insert" parameterType="Library.dto.RentalDto">
+  insert into rentals (r_num,u_id,b_id,r_date)
+  values (rental_seq.nextval,#{u_id},#{b_id},sysdate) 
+ </insert> 
+	 
+  
+ <select id="list" resultType="Library.dto.RentalDto">
+  select * from rentals
+</select>	 
+ 
+
+	<select id="getRentalJoinBookList" resultType="Library.dto.RentalInfoDto" parameterType="String">
+		SELECT
+			r.u_id as u_id, 
+			r.b_id as b_id,
+			r.r_date as r_date,
+			b.b_title as b_title,
+			b.b_auth as b_auth,
+			b.b_pub as b_pub,
+			b.b_genre as b_genre
+		FROM
+			RENTALS r JOIN BOOKS b ON r.b_id = b.b_id
+		WHERE
+			r.u_id = #{u_id}
+	</select>
+
+	<select id="getRentalInfoByBid" resultType="Library.dto.RentalInfoDto" parameterType="String">
+		SELECT
+			r.u_id as u_id, 
+			r.b_id as b_id,
+			r.r_date as r_date,
+			b.b_title as b_title,
+			b.b_auth as b_auth,
+			b.b_pub as b_pub,
+			b.b_genre as b_genre
+		FROM
+			RENTALS r JOIN BOOKS b ON r.b_id = b.b_id
+		WHERE
+			r.b_id = #{b_id}
+	</select>
+	
+	
+	<delete id="delete" parameterType="Library.dto.RentalDto">
+		DELETE 
+		FROM 
+			RENTALS
+		WHERE
+			u_id=#{u_id} and b_id=#{b_id}
+	</delete>
+	
+</mapper>

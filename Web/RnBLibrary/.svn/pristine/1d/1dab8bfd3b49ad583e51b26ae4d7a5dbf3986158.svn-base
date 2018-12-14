@@ -1,0 +1,22 @@
+package Library.dao;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import Library.dto.UserDto;
+
+
+@Repository
+public class UserDao {
+
+	@Autowired SqlSession session;
+	
+	public UserDto getUserById(String u_id)	{
+		return session.selectOne("users.getUserById", u_id);
+	}
+	
+	public int selectById(UserDto userDto) {
+		return session.selectOne("users.selectById", userDto);
+	}
+}

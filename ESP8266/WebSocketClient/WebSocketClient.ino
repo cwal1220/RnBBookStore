@@ -59,7 +59,6 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
 			break;
 		case WStype_CONNECTED: // 연결 성공시
 			Serial.printf("[WSc] Connected to url: %s\n", payload);
-			webSocket.sendTXT("Connected");
       beep(3);
 			break;
 		case WStype_TEXT:
@@ -114,7 +113,7 @@ void setup() {
 //		delay(100);
 //	}
 
-	// 웹소켓 IP, 주소,,,
+	// 웹소켓 IP, 주소
 	webSocket.begin("49.236.136.179", 8080, "/hehe/broadcasting");
 
 	// 웹소켓 이벤트 핸들러 등록
@@ -256,11 +255,11 @@ void setup_runtime() {
   Serial.print("Connected to "); Serial.println(ssid);
   Serial.print("IP address: "); Serial.println(WiFi.localIP());
 
-  if (MDNS.begin("Doraemon_Gyro")) {
-   Serial.println("MDNS responder started");
+  if(MDNS.begin("RFID_READER")) {
+    Serial.println("MDNS responder started");
   }
   
-    webServer.onNotFound(handleNotFound);
+  webServer.onNotFound(handleNotFound);
   webServer.begin();
   Serial.println("HTTP server started");  
 }

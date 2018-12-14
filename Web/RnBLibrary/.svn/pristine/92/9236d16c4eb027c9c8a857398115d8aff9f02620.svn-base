@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="users">
+
+	<select id="getUserById" parameterType="String" resultType="Library.dto.UserDto"> 
+		SELECT
+			*
+		FROM
+			USERS
+		WHERE
+			u_id = #{u_id}
+	</select>
+	
+	<select id="selectById" parameterType="Library.dto.UserDto" resultType="int">
+		SELECT count(*) FROM users WHERE u_id = #{u_id }
+	</select>
+	
+	<select id="selectCntAll" resultType="int">
+		SELECT count(*) FROM users
+	</select>
+	
+	<select id="selectPagingList" resultType="Library.dto.UserDto">
+ 		SELECT * FROM (SELECT rownum rnum, U.* FROM (SELECT * FROM users ORDER BY u_id DESC) U ORDER BY rnum) WHERE rnum BETWEEN #{startNo} AND #{endNo } 
+ 	</select>
+	
+	<select id="selectView" parameterType="Library.dto.UserDto" resultType="Library.dto.UserDto">
+		SELECT * FROM users WHERE n_id=#{n_id }
+	</select>
+	
+</mapper>
+	
+	

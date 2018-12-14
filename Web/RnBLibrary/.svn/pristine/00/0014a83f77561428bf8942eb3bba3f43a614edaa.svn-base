@@ -1,0 +1,62 @@
+package Library.controller;
+
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import Library.dao.NoticeDao;
+import Library.dto.NoticeDto;
+import Library.util.Paging;
+
+@Controller
+public class NoticeController {
+
+	@Autowired NoticeDao noticeDao;
+	private Logger logger = LoggerFactory.getLogger(NoticeController.class);
+	
+	@RequestMapping(value="/noticeList.do")
+	public ModelAndView list(ModelAndView mav, @RequestParam(defaultValue="0", required=false)int curPage) {
+		
+		int totalCount = noticeDao.selectCntAll();
+		System.out.println(totalCount+"");
+		
+		Paging paging = new Paging(totalCount, curPage);
+		
+		//전체 조회
+		List<NoticeDto> noticeList = noticeDao.selectPagingList(paging);
+		System.out.println(noticeList.toString());
+		
+		//조회결과 MODEL로 넣기
+		mav.addObject("noticeList", noticeList);
+		mav.addObject("paging", paging);
+		
+		mav.setViewName("/user/noticeList");
+		
+		return mav;
+	}
+	
+	@RequestMapping(value="/noticeView.do", method=RequestMethod.GET)
+	public String view(Model model, NoticeDto notice) {
+		
+		logger.info("view 활성화");
+		
+		//게시물 하나 조회
+		int check = noticeDao.updateCnt(notice);
+		NoticeDto newNotice = noticeDao.selectView(notice);
+		logger.info("newNotice : " + newNotice.toString());
+		
+		//조회 결과 model에 넣기
+		model.addAttribute("notice", newNotice);
+		
+		return "/user/noticeView";
+		
+	}
+}

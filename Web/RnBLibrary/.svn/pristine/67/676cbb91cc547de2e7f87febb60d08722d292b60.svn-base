@@ -1,0 +1,44 @@
+package Library.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import Library.dao.BookDao;
+import Library.dto.BookDto;
+import Library.util.PageDto;
+
+@Service
+public class BookServiceImpl implements BookService{
+
+	@Autowired BookDao bookDao;
+
+	@Override
+	public void insert(BookDto dto) {
+		bookDao.insert(dto);
+		 
+	}
+
+	@Override
+	public BookDto select(int b_num) {
+		return bookDao.select(b_num); 
+	}
+
+	@Override
+	public List<BookDto> bookList(PageDto pv) {
+		return bookDao.bookList(pv);
+	} 
+
+	@Override
+	public int countdata() {
+		// TODO Auto-generated method stub
+		return bookDao.countdata();
+	}
+ 
+	@Override
+	public List<BookDto> search(String data) {
+		// TODO Auto-generated method stub
+		return bookDao.search(data);
+	}
+}
